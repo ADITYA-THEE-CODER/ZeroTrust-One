@@ -8,13 +8,13 @@ from app.api.url_scan import router as url_router
 app = FastAPI(
     title="ZeroTrust One",
     description="AI-Powered Cybersecurity Platform",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 # Register API routes
 app.include_router(url_router, prefix="/api", tags=["URL Scanner"])
 
-# Serve static files
+# Static files
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 # Templates
@@ -27,8 +27,19 @@ async def home(request: Request):
         request=request,
         name="index.html",
         context={
-            "title": "ZeroTrust One"
-        }
+            "title": "ZeroTrust One",
+        },
+    )
+
+
+@app.get("/url-scanner")
+async def url_scanner(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="url_scanner.html",
+        context={
+            "title": "URL Scanner | ZeroTrust One",
+        },
     )
 
 
@@ -38,6 +49,6 @@ async def health():
         content={
             "status": "healthy",
             "service": "ZeroTrust One Backend",
-            "version": "1.0.0"
+            "version": "1.0.0",
         }
     )
