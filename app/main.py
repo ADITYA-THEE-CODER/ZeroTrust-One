@@ -1,25 +1,27 @@
 from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import JSONResponse
 
 app = FastAPI(
     title="ZeroTrust One",
-    description="AI Powered Cybersecurity Platform",
+    description="AI-Powered Cybersecurity Platform",
     version="1.0.0"
 )
 
+# Serve static files
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
+# Templates
 templates = Jinja2Templates(directory="app/templates")
 
 
 @app.get("/")
 async def home(request: Request):
     return templates.TemplateResponse(
-        "index.html",
-        {
-            "request": request,
+        request=request,
+        name="index.html",
+        context={
             "title": "ZeroTrust One"
         }
     )
@@ -30,6 +32,7 @@ async def health():
     return JSONResponse(
         content={
             "status": "healthy",
-            "service": "ZeroTrust One Backend"
+            "service": "ZeroTrust One Backend",
+            "version": "1.0.0"
         }
     )
